@@ -371,7 +371,7 @@ func jsonifyMessage(m Message) (map[string]interface{}, error) {
 	return r, nil
 }
 
-func getUsers(ids []int64) (map[int64]User{}, error) {
+func getUsers(ids []int64) (map[int64]User, error) {
 	users := []User{}
 	err := db.Select(&users, "SELECT * FROM user WHERE id IN (?)", arrayToString(ids))
 	if err != nil {
