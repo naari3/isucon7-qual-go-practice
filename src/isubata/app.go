@@ -232,7 +232,7 @@ type ChannelInfo struct {
 
 type IconDumpInfo struct {
 	Name string `db:"name"`
-	Data []data `db:"data"`
+	Data []byte `db:"data"`
 }
 
 func getChannel(c echo.Context) error {
