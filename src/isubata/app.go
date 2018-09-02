@@ -355,17 +355,12 @@ func postMessage(c echo.Context) error {
 	return c.NoContent(204)
 }
 
-func jsonifyMessage(m Message, _ User) (map[string]interface{}, error) {
-	u := User{}
-	err := db.Get(&u, "SELECT name, display_name, avatar_icon FROM user WHERE id = ?",
-		m.UserID)
-	if err != nil {
-		return nil, err
-	}
+func jsonifyMessage(m Message, u User) (map[string]interface{}, error) {
+	messageUser := User{Name: u.Name, DisplayName: u.DisplayName, AvatarIcon: u.AvatarIcon}
 
 	r := make(map[string]interface{})
 	r["id"] = m.ID
-	r["user"] = u
+	r["user"] = messageUser
 	r["date"] = m.CreatedAt.Format("2006/01/02 15:04:05")
 	r["content"] = m.Content
 	return r, nil
@@ -704,7 +699,7 @@ func postProfile(c echo.Context) error {
 		if err != nil {
 			return err
 		}
-		ioutil.WriteFile(os.Getenv("HOME") + "/icons/" + avatarName, avatarData, os.ModePerm)
+		ioutil.WriteFile(os.Getenv("HOME")+"/icons/"+avatarName, avatarData, os.ModePerm)
 		_, err = db.Exec("UPDATE user SET avatar_icon = ? WHERE id = ?", avatarName, self.ID)
 		if err != nil {
 			return err
@@ -755,10 +750,10 @@ func dumpIcon(c echo.Context) error {
 	}
 
 	for _, icon := range icons {
-		ioutil.WriteFile(os.Getenv("HOME") + "/icons/" + icon.Name, icon.Data, os.ModePerm)
+		ioutil.WriteFile(os.Getenv("HOME")+"/icons/"+icon.Name, icon.Data, os.ModePerm)
 	}
 
-	return c.String(http.StatusOK, os.Getenv("HOME") + "/icons/")
+	return c.String(http.StatusOK, os.Getenv("HOME")+"/icons/")
 }
 
 func tAdd(a, b int64) int64 {
