@@ -371,6 +371,23 @@ func jsonifyMessage(m Message) (map[string]interface{}, error) {
 	return r, nil
 }
 
+func getUsers(ids []int64) (map[int64]User, error) {
+	users := []User{}
+	err := db.Select(&users, "SELECT * FROM user WHERE id IN (?)", arrayToString(ids))
+	if err != nil {
+		return nil, err
+	}
+	userMap := map[int64]User
+	for _, user := range users {
+		userMap[user.ID] = = user
+	}
+	return userMap, nil
+}
+
+func arrayToString(a []int) string {
+	return strings.Trim(strings.Replace(fmt.Sprint(a), " ", ",", -1), "[]")
+}
+
 func getMessage(c echo.Context) error {
 	userID := sessUserID(c)
 	if userID == 0 {
