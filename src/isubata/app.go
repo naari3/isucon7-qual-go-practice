@@ -384,7 +384,7 @@ func getUsers(ids []int64) (map[int64]User, error) {
 	return userMap, nil
 }
 
-func arrayToString(a []int) string {
+func arrayToString(a []int64) string {
 	return strings.Trim(strings.Replace(fmt.Sprint(a), " ", ",", -1), "[]")
 }
 
