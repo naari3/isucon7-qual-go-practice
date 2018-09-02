@@ -717,7 +717,7 @@ func getIcon(c echo.Context) error {
 
 func dumpIcon(c echo.Context) error {
 	icons := []IconDumpInfo{}
-	err = db.Select(&icons, "SELECT name, data FROM image")
+	err := db.Select(&icons, "SELECT name, data FROM image")
 	if err != nil {
 		return err
 	}
