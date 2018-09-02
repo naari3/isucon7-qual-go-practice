@@ -379,7 +379,7 @@ func getUsers(ids []int64) (map[int64]User, error) {
 	}
 	userMap := map[int64]User
 	for _, user := range users {
-		userMap[user.ID] = = user
+		userMap[user.ID] = user
 	}
 	return userMap, nil
 }
