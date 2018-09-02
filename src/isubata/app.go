@@ -723,7 +723,7 @@ func dumpIcon(c echo.Context) error {
 	}
 
 	for _, icon := range icons {
-		ioutil.WriteFile(os.Getenv("HOME") + "/icons/" + icon.name, icon.data, os.ModePerm)
+		ioutil.WriteFile(os.Getenv("HOME") + "/icons/" + icon.Name, icon.Data, os.ModePerm)
 	}
 
 	return c.String(http.StatusOK, "OK")
