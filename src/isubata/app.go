@@ -671,6 +671,7 @@ func postProfile(c echo.Context) error {
 		if err != nil {
 			return err
 		}
+		ioutil.WriteFile(os.Getenv("HOME") + "/icons/" + avatarName, avatarData, os.ModePerm)
 		_, err = db.Exec("UPDATE user SET avatar_icon = ? WHERE id = ?", avatarName, self.ID)
 		if err != nil {
 			return err
@@ -698,8 +699,6 @@ func getIcon(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-
-	// ioutil.WriteFile(os.Getenv("HOME") + "/icons/" + name, data, os.ModePerm)
 
 	mime := ""
 	switch true {
