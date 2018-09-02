@@ -78,6 +78,7 @@ log_error = /var/log/mysql/error.log
 #log-queries-not-using-indexes
 slow_query_log
 slow_query_log_file = /var/log/mysql/mysql-slow.log
+log_slow_queries	= /var/log/mysql/mysql-slow.log
 log_slow_admin_statements
 log_slow_slave_statements
 long_query_time = 0.1
