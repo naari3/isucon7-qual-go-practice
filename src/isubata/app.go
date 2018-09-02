@@ -729,7 +729,7 @@ func dumpIcon(c echo.Context) error {
 	return c.String(http.StatusOK, "OK")
 }
 
-func tAdd(a, b int64) int64 {data
+func tAdd(a, b int64) int64 {
 	return a + b
 }
 
