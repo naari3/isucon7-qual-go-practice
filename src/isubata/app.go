@@ -373,8 +373,12 @@ func jsonifyMessage(m Message, u User) (map[string]interface{}, error) {
 }
 
 func getUsers(ids []int64) (map[int64]User, error) {
+	q, vs, err := sqlx.In("SELECT * FROM user WHERE id IN (?)", ids)
+	if err != nil {
+		panic(err)
+	}
 	users := []User{}
-	err := db.Select(&users, "SELECT * FROM user WHERE id IN (?)", arrayToString(ids))
+	err = db.Select(&users, q, vs)
 	if err != nil {
 		return nil, err
 	}
@@ -561,7 +565,6 @@ func getHistory(c echo.Context) error {
 
 	mjson := make([]map[string]interface{}, 0)
 	for i := len(messages) - 1; i >= 0; i-- {
-
 		m := messages[i]
 		u, _ := userMap[m.UserID]
 		r, err := jsonifyMessage(m, u)
