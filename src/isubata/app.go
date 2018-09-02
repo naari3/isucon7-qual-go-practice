@@ -355,14 +355,7 @@ func postMessage(c echo.Context) error {
 	return c.NoContent(204)
 }
 
-func jsonifyMessage(m Message) (map[string]interface{}, error) {
-	u := User{}
-	err := db.Get(&u, "SELECT name, display_name, avatar_icon FROM user WHERE id = ?",
-		m.UserID)
-	if err != nil {
-		return nil, err
-	}
-
+func jsonifyMessage(m Message, u User) (map[string]interface{}, error) {
 	r := make(map[string]interface{})
 	r["id"] = m.ID
 	r["user"] = u
@@ -408,10 +401,17 @@ func getMessage(c echo.Context) error {
 		return err
 	}
 
+	userIds := []int64{}
+	for _, message := range messages {
+		userIds = append(userIds, message.UserID)
+	}
+	userMap, err := getUsers(userIds)
+
 	response := make([]map[string]interface{}, 0)
 	for i := len(messages) - 1; i >= 0; i-- {
 		m := messages[i]
-		r, err := jsonifyMessage(m)
+		u, _ := userMap[m.UserID]
+		r, err := jsonifyMessage(m, u)
 		if err != nil {
 			return err
 		}
@@ -545,9 +545,18 @@ func getHistory(c echo.Context) error {
 		return err
 	}
 
+	userIds := []int64{}
+	for _, message := range messages {
+		userIds = append(userIds, message.UserID)
+	}
+	userMap, err := getUsers(userIds)
+
 	mjson := make([]map[string]interface{}, 0)
 	for i := len(messages) - 1; i >= 0; i-- {
-		r, err := jsonifyMessage(messages[i])
+
+		m := messages[i]
+		u, _ := userMap[m.UserID]
+		r, err := jsonifyMessage(m, u)
 		if err != nil {
 			return err
 		}
