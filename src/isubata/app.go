@@ -722,7 +722,7 @@ func dumpIcon(c echo.Context) error {
 		return err
 	}
 
-	for icon := range icons {
+	for _, icon := range icons {
 		ioutil.WriteFile(os.Getenv("HOME") + "/icons/" + icon.name, icon.data, os.ModePerm)
 	}
 
