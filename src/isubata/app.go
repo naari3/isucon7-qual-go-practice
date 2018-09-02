@@ -597,7 +597,7 @@ func getProfile(c echo.Context) error {
 
 	userName := c.Param("user_name")
 	var other User
-	err = db.Get(&other, "SELECT * FROM user WHERE name = ?", userName)
+	err = db.Get(&other, "SELECT * FROM user WHERE name = ? LIMIT 1", userName)
 	if err == sql.ErrNoRows {
 		return echo.ErrNotFound
 	}
@@ -777,7 +777,7 @@ func main() {
 		"xrange": tRange,
 	}
 	e.Renderer = &Renderer{
-		templates: template.Must(template.New("").Funcs(funcs).ParseGlob("views/*.html")),
+		templates: template.Must(template.New("").Funcs(funcs).ParseGlob("views_/*.html")),
 	}
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte("secretonymoris"))))
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
