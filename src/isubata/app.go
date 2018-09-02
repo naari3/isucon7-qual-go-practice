@@ -375,7 +375,7 @@ func jsonifyMessage(m Message, u User) (map[string]interface{}, error) {
 func getUsers(ids []int64) (map[int64]User, error) {
 	q, vs, err := sqlx.In("SELECT * FROM user WHERE id IN (?)", ids)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	users := []User{}
 	err = db.Select(&users, q, vs...)
@@ -387,10 +387,6 @@ func getUsers(ids []int64) (map[int64]User, error) {
 		userMap[user.ID] = user
 	}
 	return userMap, nil
-}
-
-func arrayToString(a []int64) string {
-	return strings.Trim(strings.Replace(fmt.Sprint(a), " ", ",", -1), "[]")
 }
 
 func getMessage(c echo.Context) error {
