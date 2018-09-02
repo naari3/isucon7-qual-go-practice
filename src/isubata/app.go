@@ -726,7 +726,7 @@ func dumpIcon(c echo.Context) error {
 		ioutil.WriteFile(os.Getenv("HOME") + "/icons/" + icon.Name, icon.Data, os.ModePerm)
 	}
 
-	return c.String(http.StatusOK, "OK")
+	return c.String(http.StatusOK, os.Getenv("HOME") + "/icons/")
 }
 
 func tAdd(a, b int64) int64 {
