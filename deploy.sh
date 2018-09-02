@@ -1,1 +1,1 @@
-/Users/yuki_sone/deploy.sh
+/home/isucon/deploy.sh
