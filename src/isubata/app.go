@@ -378,7 +378,7 @@ func getUsers(ids []int64) (map[int64]User, error) {
 		panic(err)
 	}
 	users := []User{}
-	err = db.Select(&users, q, vs)
+	err = db.Select(&users, q, vs...)
 	if err != nil {
 		return nil, err
 	}
