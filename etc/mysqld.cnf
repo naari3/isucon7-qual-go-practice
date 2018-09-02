@@ -79,7 +79,10 @@ log_error = /var/log/mysql/error.log
 slow_query_log
 slow_query_log_file = mysql-slow.log
 log_slow_admin_statements
+log_slow_slave_statements
 long_query_time = 0.1
+loose_log_queries_not_using_indexes
+loose_log_throttle_queries_not_using_indexes = 10
 #
 # The following can be used as easy to replay backup logs or for replication.
 # note: if you are setting up a replication slave, see README.Debian about
