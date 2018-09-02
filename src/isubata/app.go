@@ -230,6 +230,11 @@ type ChannelInfo struct {
 	CreatedAt   time.Time `db:"created_at"`
 }
 
+type IconDumpInfo struct {
+	Name string `db:"name"`
+	Data []data `db:"data"`
+}
+
 func getChannel(c echo.Context) error {
 	user, err := ensureLogin(c)
 	if user == nil {
@@ -694,6 +699,8 @@ func getIcon(c echo.Context) error {
 		return err
 	}
 
+	// ioutil.WriteFile(os.Getenv("HOME") + "/icons/" + name, data, os.ModePerm)
+
 	mime := ""
 	switch true {
 	case strings.HasSuffix(name, ".jpg"), strings.HasSuffix(name, ".jpeg"):
@@ -708,7 +715,21 @@ func getIcon(c echo.Context) error {
 	return c.Blob(http.StatusOK, mime, data)
 }
 
-func tAdd(a, b int64) int64 {
+func dumpIcon(c echo.Context) error {
+	icons := []IconDumpInfo{}
+	err = db.Select(&icons, "SELECT name, data FROM image")
+	if err != nil {
+		return err
+	}
+
+	for icon := range icons {
+		ioutil.WriteFile(os.Getenv("HOME") + "/icons/" + icon.name, icon.data, os.ModePerm)
+	}
+
+	return c.String(http.StatusOK, "OK")
+}
+
+func tAdd(a, b int64) int64 {data
 	return a + b
 }
 
@@ -755,6 +776,8 @@ func main() {
 	e.GET("add_channel", getAddChannel)
 	e.POST("add_channel", postAddChannel)
 	e.GET("/icons/:file_name", getIcon)
+
+	e.GET("/dump/icons", dumpIcon)
 
 	e.Start(":5000")
 }
