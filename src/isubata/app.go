@@ -355,8 +355,14 @@ func postMessage(c echo.Context) error {
 	return c.NoContent(204)
 }
 
-func jsonifyMessage(m Message, u User) (map[string]interface{}, error) {
-	messageUser := User{Name: u.Name, DisplayName: u.DisplayName, AvatarIcon: u.AvatarIcon}
+func jsonifyMessage(m Message, _ User) (map[string]interface{}, error) {
+	// messageUser := User{Name: u.Name, DisplayName: u.DisplayName, AvatarIcon: u.AvatarIcon}
+	u := User{}
+	err := db.Get(&u, "SELECT name, display_name, avatar_icon FROM user WHERE id = ?",
+		m.UserID)
+	if err != nil {
+		return nil, err
+	}
 
 	r := make(map[string]interface{})
 	r["id"] = m.ID
